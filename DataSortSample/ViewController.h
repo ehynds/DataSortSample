@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
-@property (strong) UITableView *tableView;
+@property (strong) IBOutlet UITableView *tableView;
 @property (strong) UICollectionView *collectionView;
+@property (strong) NSMutableArray *recipes;
 
 @end
