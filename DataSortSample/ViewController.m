@@ -6,9 +6,17 @@
 //  Copyright (c) 2014 Matthew Propst. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+#import <SwipeView/SwipeView.h>
 #import "ViewController.h"
 
-@interface ViewController ()
+#define kCellWidth 200
+#define kCellHeight 200
+#define kCellMarginTop 25
+#define kCellMarginBottom 50
+#define kCellHeaderHeight 25
+
+@interface ViewController () <SwipeViewDataSource, SwipeViewDelegate>
 
 @end
 
@@ -28,7 +36,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.recipes count];
+    return 1; // [self.recipes count];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -44,46 +52,27 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+    
+        SwipeView *swipeView = [[SwipeView alloc] initWithFrame:cell.bounds];
+        swipeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        swipeView.delegate = self;
+        swipeView.dataSource = self;
+        swipeView.truncateFinalPage = YES;
+        swipeView.pagingEnabled = NO;
+        
+        [cell addSubview:swipeView];
     }
-    UIScrollView *sv = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 768, 60)];
-    UIView *redRectangle = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 800, 60)];
-    [redRectangle setBackgroundColor:[UIColor redColor]];
-    UIButton *redBtnInfo = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 300, 50)];
-    [redBtnInfo setBackgroundColor:[UIColor blackColor]];
-    [redBtnInfo setTag:indexPath.row];
-    [redBtnInfo addTarget:self action:@selector(logRow:) forControlEvents:UIControlEventTouchUpInside];
-    [redBtnInfo setTitle:@"Log Red Message" forState:UIControlStateNormal];
-    [redRectangle addSubview:redBtnInfo];
-    [sv addSubview:redRectangle];
     
-    UIView *greenRectangle = [[UIView alloc] initWithFrame:CGRectMake(800, 0, 800, 60)];
-    [greenRectangle setBackgroundColor:[UIColor greenColor]];
-    
-    UIButton *greenBtnInfo = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 300, 50)];
-    [greenBtnInfo setBackgroundColor:[UIColor blackColor]];
-    [greenBtnInfo setTag:indexPath.row];
-    [greenBtnInfo addTarget:self action:@selector(logGreenRow:) forControlEvents:UIControlEventTouchUpInside];
-    [greenBtnInfo setTitle:@"Log Green Message" forState:UIControlStateNormal];
-    [greenRectangle addSubview:greenBtnInfo];
-    [sv addSubview:greenRectangle];
-    
-    sv.contentSize = CGSizeMake(1600, 60);
-    sv.delegate = self;
-    [cell addSubview:sv];
-    cell.textLabel.text = [self.recipes objectAtIndex:indexPath.row];
-
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
     return cell;
 }
 
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 62;
+    return kCellMarginTop + kCellHeight;
 }
 
-
-- (NSString *)tableView:(UITableView *)tableView
-titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section];
 }
@@ -92,19 +81,68 @@ titleForHeaderInSection:(NSInteger)section
     return [[UILocalizedIndexedCollation currentCollation] sectionIndexTitles];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView
-sectionForSectionIndexTitle:(NSString *)title
-               atIndex:(NSInteger)index
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
     return [[UILocalizedIndexedCollation currentCollation] sectionForSectionIndexTitleAtIndex:index];
 }
 
--(void)logRow:(UIButton*)sender{
-        NSLog(@"Red button - row number: %i", sender.tag+1);
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+    label.backgroundColor = [UIColor grayColor];
+    label.text = title;
+    [label sizeToFit];
+    
+    return label;
 }
 
--(void)logGreenRow:(UIButton*)sender{
-    NSLog(@"Green button - row number: %i", sender.tag+1);
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return kCellHeaderHeight;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [[UIView alloc] initWithFrame:CGRectZero];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return kCellMarginBottom;
+}
+
+#pragma mark - swipe view delegate methods
+
+- (NSInteger)numberOfItemsInSwipeView:(SwipeView *)swipeView
+{
+    return [self.recipes count];
+}
+
+- (UIView *)swipeView:(SwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
+{
+    UILabel *label = nil;
+    
+    if(view == nil) {
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, kCellMarginTop, kCellWidth, kCellHeight)];
+        view.contentMode = UIViewContentModeCenter;
+        view.layer.borderWidth = 1.0f;
+        view.layer.borderColor = [UIColor blackColor].CGColor;
+        
+        label = [[UILabel alloc] initWithFrame:view.bounds];
+        label.backgroundColor = [UIColor clearColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [label.font fontWithSize:20];
+        label.tag = 1;
+        [view addSubview:label];
+    } else {
+        label = (UILabel *)[view viewWithTag:1];
+    }
+    
+    label.text = [self.recipes objectAtIndex:index];
+    
+    return view;
+}
+
+- (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index {
+    NSLog(@"Selected %@", self.recipes[index]);
+    // UIView *selectedView = [swipeView itemViewAtIndex:index];
 }
 
 @end
