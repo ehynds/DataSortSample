@@ -12,7 +12,7 @@
 
 #define kCellWidth 200
 #define kCellHeight 200
-#define kCellMarginTop 25
+#define kCellMarginTop 20
 #define kCellMarginBottom 50
 #define kCellHeaderHeight 25
 
@@ -132,7 +132,10 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reusableCellIdentifier];
         SwipeView *carousel = [self.carousels objectForKey:letter];
-        carousel.frame = cell.bounds;
+        carousel.frame = CGRectMake(cell.frame.origin.x,
+                                    cell.frame.origin.y + kCellMarginTop,
+                                    cell.frame.size.width,
+                                    cell.frame.size.height - kCellMarginTop - kCellMarginBottom);
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell addSubview:carousel];
     }
@@ -141,7 +144,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return kCellMarginTop + kCellHeight;
+    return kCellMarginTop + kCellMarginBottom + kCellHeight;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -171,14 +174,6 @@
     return kCellHeaderHeight;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame:CGRectZero];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return kCellMarginBottom;
-}
-
 #pragma mark - SwipeView delegates
 
 - (NSInteger)numberOfItemsInSwipeView:(SwipeView *)carousel
@@ -192,7 +187,7 @@
     UILabel *label = nil;
     
     if(view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, kCellMarginTop, kCellWidth, kCellHeight)];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kCellWidth, kCellHeight)];
         view.contentMode = UIViewContentModeCenter;
         view.layer.borderWidth = 1.0f;
         view.layer.borderColor = [UIColor blackColor].CGColor;
