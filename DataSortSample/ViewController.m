@@ -67,12 +67,8 @@
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
+// Creates a dictionary from the recipes where the key is the letter and the
+// value is an array of recipes that begin with the letter.
 - (NSMutableDictionary *)groupByAlpha
 {
     NSMutableDictionary *ret = [NSMutableDictionary dictionary];
@@ -90,6 +86,7 @@
     return ret;
 }
 
+// Returns the letter at a specific index (0 = a, 1 = b, and so on)
 - (NSString *)letterAtIndex:(NSInteger)index
 {
     return [self.letters objectAtIndex:index];
@@ -106,6 +103,8 @@
     
     return @"";
 }
+
+#pragma mark - UITableView delegates
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -130,7 +129,6 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell addSubview:carousel];
     }
-    NSLog(@"Creating cell for letter %@, section index is %d", [self letterAtIndex:indexPath.section], indexPath.section);
     
     return cell;
 }
@@ -174,7 +172,7 @@
     return kCellMarginBottom;
 }
 
-#pragma mark - swipe view delegate methods
+#pragma mark - SwipeView delegates
 
 - (NSInteger)numberOfItemsInSwipeView:(SwipeView *)carousel
 {
@@ -203,7 +201,6 @@
     }
     
     NSArray *recipes = [self.recipeDict objectForKey:[self letterForCarousel:carousel]];
-    NSLog(@"Recipies for letter %@ are %@", [self letterForCarousel:carousel], recipes);
     label.text = [recipes objectAtIndex:index];
     
     return view;
