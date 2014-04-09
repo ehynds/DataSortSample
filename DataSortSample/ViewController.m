@@ -18,6 +18,9 @@
 
 @interface ViewController () <SwipeViewDataSource, SwipeViewDelegate>
 
+@property(nonatomic, strong) NSMutableDictionary *recipeDict;
+@property(nonatomic, strong) NSMutableDictionary *carousels;
+
 @end
 
 @implementation ViewController
@@ -25,7 +28,41 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.recipes = [NSMutableArray arrayWithObjects:@"Egg Benedict", @"Mushroom Risotto", @"Full Breakfast", @"Hamburger", @"Ham and Egg Sandwich", @"Creme Brelee", @"White Chocolate Donut", @"Starbucks Coffee", @"Vegetable Curry", @"Instant Noodle with Egg", @"Noodle with BBQ Pork", nil];
+    
+    self.recipes = @[@"Egg Benedict",
+                     @"Mushroom Risotto",
+                     @"Full Breakfast",
+                     @"Hamburger",
+                     @"Ham and Egg Sandwich",
+                     @"Creme Brelee",
+                     @"Pound Cake",
+                     @"Pancakes",
+                     @"Black Bean Soup",
+                     @"Ginger Bread",
+                     @"Vegetable Stir Fry",
+                     @"Omlette",
+                     @"Candied Apples",
+                     @"Apple Pie",
+                     @"Applesauce",
+                     @"White Chocolate Donut",
+                     @"Starbucks Coffee",
+                     @"Vegetable Curry",
+                     @"Instant Noodle with Egg",
+                     @"Noodle with BBQ Pork"];
+    
+    self.recipeDict = [self groupByAlpha];
+    
+    // Create a carousel for each row
+    self.carousels = [NSMutableDictionary dictionary];
+    for(NSString *letter in [self.recipeDict allKeys]) {
+        SwipeView *carousel = [[SwipeView alloc] initWithFrame:CGRectZero];
+        carousel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        carousel.delegate = self;
+        carousel.dataSource = self;
+        carousel.truncateFinalPage = YES;
+        carousel.pagingEnabled = NO;
+        self.carousels[letter] = carousel;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -34,36 +71,65 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (NSMutableDictionary *)groupByAlpha
+{
+    NSMutableDictionary *ret = [NSMutableDictionary dictionary];
+    
+    for(NSString *recipe in self.recipes) {
+        NSString *dictKey = [[NSString stringWithFormat:@"%c", [recipe characterAtIndex:0]] lowercaseString];
+        
+        if([ret objectForKey:dictKey] == nil) {
+            [ret setObject:[NSMutableArray array] forKey:dictKey];
+        }
+        
+        [[ret objectForKey:dictKey] addObject:recipe];
+    }
+    
+    return ret;
+}
+
+- (NSString *)letterAtIndex:(NSInteger)index
+{
+    return [[self.recipeDict allKeys] objectAtIndex:index];
+}
+
+// Returns the carousel associated with a given letter
+- (NSString *)letterForCarousel:(SwipeView *)carousel
+{
+    for(NSString *letter in self.recipeDict) {
+        if([self.carousels objectForKey:letter] == carousel) {
+            return letter;
+        }
+    }
+    
+    return @"";
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1; // [self.recipes count];
+    return 1;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 26;
+    NSLog(@"Number of sections in table %d", [[self.recipeDict allKeys] count]);
+    return [[self.recipeDict allKeys] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *simpleTableIdentifier = @"SimpleTableCell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    NSString *letter = [self letterAtIndex:indexPath.section];
+    NSString *reusableCellIdentifier = [NSString stringWithFormat:@"RecipeTableCell_%@", letter];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-    
-        SwipeView *swipeView = [[SwipeView alloc] initWithFrame:cell.bounds];
-        swipeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        swipeView.delegate = self;
-        swipeView.dataSource = self;
-        swipeView.truncateFinalPage = YES;
-        swipeView.pagingEnabled = NO;
-        
-        [cell addSubview:swipeView];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reusableCellIdentifier];
+        SwipeView *carousel = [self.carousels objectForKey:letter];
+        carousel.frame = cell.bounds;
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell addSubview:carousel];
     }
-    
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    NSLog(@"Creating cell for letter %@, section index is %d", [self letterAtIndex:indexPath.section], indexPath.section);
     
     return cell;
 }
@@ -72,13 +138,12 @@
     return kCellMarginTop + kCellHeight;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section];
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return [[self.recipeDict allKeys] objectAtIndex:section];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [[UILocalizedIndexedCollation currentCollation] sectionIndexTitles];
+    return [self.recipeDict allKeys];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
@@ -110,12 +175,13 @@
 
 #pragma mark - swipe view delegate methods
 
-- (NSInteger)numberOfItemsInSwipeView:(SwipeView *)swipeView
+- (NSInteger)numberOfItemsInSwipeView:(SwipeView *)carousel
 {
-    return [self.recipes count];
+    NSString *letter = [self letterForCarousel:carousel];
+    return [[self.recipeDict objectForKey:letter] count];
 }
 
-- (UIView *)swipeView:(SwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
+- (UIView *)swipeView:(SwipeView *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
     
@@ -135,12 +201,15 @@
         label = (UILabel *)[view viewWithTag:1];
     }
     
-    label.text = [self.recipes objectAtIndex:index];
+    NSArray *recipes = [self.recipeDict objectForKey:[self letterForCarousel:carousel]];
+    NSLog(@"Recipies for letter %@ are %@", [self letterForCarousel:carousel], recipes);
+    label.text = [recipes objectAtIndex:index];
     
     return view;
 }
 
-- (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index {
+- (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index
+{
     NSLog(@"Selected %@", self.recipes[index]);
     // UIView *selectedView = [swipeView itemViewAtIndex:index];
 }

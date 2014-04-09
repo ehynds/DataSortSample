@@ -11,6 +11,6 @@
 @interface ViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (strong) IBOutlet UITableView *tableView;
 @property (strong) UICollectionView *collectionView;
-@property (strong) NSMutableArray *recipes;
+@property (strong) NSArray *recipes;
 
 @end
