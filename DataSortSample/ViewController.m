@@ -96,7 +96,7 @@
     carousel.horizontalEdgeOffset = kIndexViewWidth;
     carousel.itemWidth = kCellWidth;
     carousel.itemSpacing = kCellHorizontalSpacing;
-    [carousel populate:[self.recipeDict objectForKey:letter]];
+    [carousel populateWithModels:[self.recipeDict objectForKey:letter]];
     self.carousels[letter] = carousel;
     
     return carousel;

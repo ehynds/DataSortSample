@@ -31,7 +31,7 @@
     return self;
 }
 
-- (void)populate:(NSArray *)models
+- (void)populateWithModels:(NSArray *)models
 {
     int counter = 0;
     

@@ -20,6 +20,6 @@
 @property (nonatomic, assign) int itemSpacing;
 
 /// Populate the carousel with an array of models
-- (void)populate:(NSArray *)models;
+- (void)populateWithModels:(NSArray *)models;
 
 @end
