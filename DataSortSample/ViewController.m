@@ -10,10 +10,12 @@
 #import <SwipeView/SwipeView.h>
 #import "ViewController.h"
 
-#define kCellWidth 200
-#define kCellHeight 200
+
+#define kCellWidth 134
+#define kCellHeight 175
 #define kCellMarginTop 20
 #define kCellMarginBottom 50
+#define kCellPadding 30 // Width of the UILocalizedIndexedCollation
 #define kCellHeaderHeight 25
 
 @interface ViewController () <SwipeViewDataSource, SwipeViewDelegate>
@@ -37,6 +39,16 @@
                      @"Ham and Egg Sandwich",
                      @"Anchovy Cup Cakes",
                      @"A1 Steak Sauce",
+                     @"Almond Butter",
+                     @"Almond Butter",
+                     @"Almond Butter",
+                     @"Almond Butter",
+                     @"Almond Butter",
+                     @"Almond Butter",
+                     @"Almond Butter",
+                     @"Almond Butter",
+                     @"Almond Butter",
+                     @"Almond Butter",
                      @"Almond Butter",
                      @"Alaskan King Salmon",
                      @"Alphabet Soup",
@@ -67,11 +79,10 @@
         carousel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         carousel.delegate = self;
         carousel.dataSource = self;
-        carousel.truncateFinalPage = YES;
+       // carousel.truncateFinalPage = YES;
         carousel.pagingEnabled = NO;
         self.carousels[letter] = carousel;
     }
-    
 }
 
 // Creates a dictionary from the recipes where the key is the letter and the
@@ -161,13 +172,18 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    // CGRect viewFrame = CGRectMake(0, 0, self.tableView.bounds.size.width - kCellPadding, kCellHeaderHeight);
+    CGRect viewFrame = CGRectMake(0, 0, self.tableView.bounds.size.width, kCellHeaderHeight);
+    UIView *view = [[UIView alloc] initWithFrame:viewFrame];
+    
     NSString *title = [self tableView:tableView titleForHeaderInSection:section];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
     label.backgroundColor = [UIColor grayColor];
-    label.text = title;
-    [label sizeToFit];
+    label.text = [title uppercaseString];
+    label.frame = CGRectMake(kCellPadding, 0, viewFrame.size.width, viewFrame.size.height);
+    [view addSubview:label];
     
-    return label;
+    return view;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -185,23 +201,57 @@
 - (UIView *)swipeView:(SwipeView *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
+    UIView *insetView = nil;
+    int numItems = [[[self recipeDict] objectForKeyedSubscript:[self letterForCarousel:carousel]] count];
+    BOOL isLastItem = numItems - 1 == index;
     
     if(view == nil) {
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kCellWidth, kCellHeight)];
+        view = [[UIView alloc] initWithFrame:CGRectZero];
         view.contentMode = UIViewContentModeCenter;
-        view.layer.borderWidth = 1.0f;
-        view.layer.borderColor = [UIColor blackColor].CGColor;
+        //view.layer.borderWidth = 1.0f;
+        //view.layer.borderColor = [UIColor blackColor].CGColor;
         
-        label = [[UILabel alloc] initWithFrame:view.bounds];
+        insetView = [[UIView alloc] initWithFrame:view.bounds];
+        insetView.tag = 1;
+        [view addSubview:insetView];
+        
+        label = [[UILabel alloc] initWithFrame:CGRectZero];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [label.font fontWithSize:20];
-        label.tag = 1;
-        [view addSubview:label];
+        label.tag = 2;
+        [insetView addSubview:label];
     } else {
-        label = (UILabel *)[view viewWithTag:1];
+        insetView = (UIView *)[view viewWithTag:1];
+        label = (UILabel *)[insetView viewWithTag:2];
+    }
+    insetView.backgroundColor = isLastItem ? [UIColor greenColor] : [UIColor redColor];
+    view.frame = CGRectMake(0, 0, kCellWidth + (kCellPadding * 2), kCellHeight);
+    
+    if(index == 0) {
+        insetView.frame = CGRectMake(kCellPadding,
+                                     0,
+                                     view.bounds.size.width - kCellPadding,
+                                     view.bounds.size.height);
+    } else if(isLastItem) {
+        insetView.frame = CGRectMake(0,
+                                     0,
+                                     view.bounds.size.width - kCellPadding,
+                                     view.bounds.size.height);
+        
+    } else {
+        float intIndex = (float)index;
+        float diff = kCellPadding * (intIndex / numItems);
+        float x = kCellPadding - diff;
+        float width = view.bounds.size.width - kCellPadding - (diff / numItems);
+        
+        NSLog(@"original: %d, x: %f width: %f | diff %f", kCellPadding, x, width, diff);
+        // int right = view.bounds.size.width - kCellPadding;
+        
+        insetView.frame = CGRectMake(x, 0, width, view.bounds.size.height);
     }
     
+    label.frame = insetView.bounds;
     NSArray *recipes = [self.recipeDict objectForKey:[self letterForCarousel:carousel]];
     label.text = [recipes objectAtIndex:index];
     
