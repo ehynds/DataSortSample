@@ -20,6 +20,7 @@
 
 @property(nonatomic, strong) NSMutableDictionary *recipeDict;
 @property(nonatomic, strong) NSMutableDictionary *carousels;
+@property(nonatomic, strong) NSArray *letters;
 
 @end
 
@@ -51,10 +52,11 @@
                      @"Noodle with BBQ Pork"];
     
     self.recipeDict = [self groupByAlpha];
+    self.letters = [[self.recipeDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
     // Create a carousel for each row
     self.carousels = [NSMutableDictionary dictionary];
-    for(NSString *letter in [self.recipeDict allKeys]) {
+    for(NSString *letter in self.letters) {
         SwipeView *carousel = [[SwipeView alloc] initWithFrame:CGRectZero];
         carousel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         carousel.delegate = self;
@@ -90,7 +92,7 @@
 
 - (NSString *)letterAtIndex:(NSInteger)index
 {
-    return [[self.recipeDict allKeys] objectAtIndex:index];
+    return [self.letters objectAtIndex:index];
 }
 
 // Returns the carousel associated with a given letter
@@ -112,8 +114,7 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSLog(@"Number of sections in table %d", [[self.recipeDict allKeys] count]);
-    return [[self.recipeDict allKeys] count];
+    return self.letters.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -139,11 +140,11 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [[self.recipeDict allKeys] objectAtIndex:section];
+    return [self letterAtIndex:section];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [self.recipeDict allKeys];
+    return self.letters;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
