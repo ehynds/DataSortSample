@@ -91,7 +91,7 @@
         return carousel;
     }
     
-    CGRect frame = CGRectMake(0, 0, self.tableView.bounds.size.width, 200);
+    CGRect frame = CGRectMake(0, 0, self.tableView.bounds.size.width, kCellHeight);
     carousel = [[CarouselView alloc] initWithFrame:frame];
     carousel.horizontalEdgeOffset = kIndexViewWidth;
     carousel.itemWidth = kCellWidth;
