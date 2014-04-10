@@ -1,10 +1,1 @@
-PODS:
-  - SwipeView (1.3)
-
-DEPENDENCIES:
-  - SwipeView (= 1.3.0)
-
-SPEC CHECKSUMS:
-  SwipeView: 9533067753d80f15049f70cf903ef7980f79acf2
-
 COCOAPODS: 0.31.1

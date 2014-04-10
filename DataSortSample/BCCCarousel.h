@@ -15,7 +15,7 @@
 
 @end
 
-@interface BCCCarousel : UIViewController
+@interface BCCCarousel : UIScrollView
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) id <CarouselViewDelegate> delegate;

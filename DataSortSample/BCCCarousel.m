@@ -18,16 +18,13 @@
 
 @implementation BCCCarousel
 
-
 - (id)initWithFrame:(CGRect)frame
           itemWidth:(int)itemWidth
         itemSpacing:(int)itemSpacing
         edgeSpacing:(int)edgeSpacing
 {
-    if(self = [super initWithNibName:nil bundle:nil]) {
-        self.scrollView = [[UIScrollView alloc] initWithFrame:frame];
-        self.scrollView.showsHorizontalScrollIndicator = NO;
-        self.scrollView.autoresizesSubviews = NO;
+    if(self = [super initWithFrame:frame]) {
+        self.showsHorizontalScrollIndicator = NO;
         
         _itemWidth = itemWidth;
         _itemSpacing = itemSpacing;
@@ -37,15 +34,10 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)populateWithModels:(NSArray *)models
 {
     int counter = 0;
-    int height = self.scrollView.bounds.size.height;
+    int height = self.bounds.size.height;
     
     for(id model in models) {
         float x = counter == 0 ? 0 : ((counter * self.itemWidth) + (self.itemSpacing * counter));
@@ -56,7 +48,7 @@
         
         CGRect itemRect = CGRectMake(x, 0, self.itemWidth, height);
         UIView *carouselItem = [[self delegate] viewForCarouselItem:model frame:itemRect];
-        [self.scrollView addSubview:carouselItem];
+        [self addSubview:carouselItem];
         [self.carouselItems addObject:carouselItem];
         
         counter++;
@@ -66,8 +58,7 @@
     totalWidth -= self.itemSpacing; // make sure the last item is flush with the edge
     totalWidth += self.edgeSpacing * 2; // account for the horizontal edge offset
     
-    self.scrollView.contentSize = CGSizeMake(totalWidth, height);
-    [self.view addSubview:self.scrollView];
+    self.contentSize = CGSizeMake(totalWidth, height);
 }
 
 @end
