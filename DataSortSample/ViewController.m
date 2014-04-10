@@ -7,7 +7,8 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import "CarouselView.h"
+#import "BCCCarouselView.h"
+#import "CarouselItemView.h"
 #import "CarouselItemModel.h"
 #import "ViewController.h"
 
@@ -76,26 +77,38 @@
     self.letters = [[self.recipeDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
 }
 
+#pragma mark - Carousel delegate methods
+
+- (UIView *)viewForCarouselItem:(id)model frame:(CGRect)frame
+{
+    UIView *itemView = [[CarouselItemView alloc] initWithFrame:frame andModel:model];
+    itemView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    return itemView;
+}
+
 #pragma mark - Utility functions
 
 // Creates a carousel for a given letter if it hasn't already been created yet.
-- (CarouselView *)carouselForLetter:(NSString *)letter
+- (BCCCarouselView *)carouselForLetter:(NSString *)letter
 {
     if(!self.carousels) {
         self.carousels = [NSMutableDictionary dictionary];
     }
     
-    CarouselView *carousel;
+    BCCCarouselView *carousel;
     
     if((carousel = [self.carousels objectForKey:letter])) {
         return carousel;
     }
     
     CGRect frame = CGRectMake(0, 0, self.tableView.bounds.size.width, kCellHeight);
-    carousel = [[CarouselView alloc] initWithFrame:frame];
-    carousel.horizontalEdgeOffset = kIndexViewWidth;
-    carousel.itemWidth = kCellWidth;
-    carousel.itemSpacing = kCellHorizontalSpacing;
+    
+    carousel = [[BCCCarouselView alloc] initWithFrame:frame
+                                         itemWidth:kCellWidth
+                                       itemSpacing:kCellHorizontalSpacing
+                                       edgeSpacing: kIndexViewWidth];
+    
+    carousel.delegate = self;
     [carousel populateWithModels:[self.recipeDict objectForKey:letter]];
     self.carousels[letter] = carousel;
     

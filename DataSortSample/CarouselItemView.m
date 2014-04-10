@@ -12,7 +12,7 @@
 @interface CarouselItemView()
 
 @property (nonatomic, strong) CarouselItemModel *model;
-@property (nonatomic, strong) UILabel *title;
+@property (nonatomic, strong) UILabel *titleLabel;
 
 @end
 
@@ -20,23 +20,21 @@
 
 - (id)initWithFrame:(CGRect)frame andModel:(CarouselItemModel *)model
 {
-    self = [super initWithFrame:frame];
-    
-    if (self) {
+    if(self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor redColor];
         self.model = model;
+        [self render];
     }
-    
-    [self render];
     
     return self;
 }
 
 - (void)render
 {
-    self.title = [[UILabel alloc] initWithFrame:self.bounds];
-    self.title.text = self.model.title;
-    [self addSubview:self.title];
+    NSLog(@"rendering item for model %@", self.model.title);
+    self.titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
+    self.titleLabel.text = self.model.title;
+    [self addSubview:self.titleLabel];
 }
 
 @end

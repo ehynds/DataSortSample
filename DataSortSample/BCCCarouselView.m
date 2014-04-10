@@ -6,27 +6,31 @@
 //  Copyright (c) 2014 Matthew Propst. All rights reserved.
 //
 
-#import "CarouselView.h"
-#import "CarouselItemView.h"
-#import "CarouselItemModel.h"
+#import "BCCCarouselView.h"
 
+@interface BCCCarouselView()
 
-@interface CarouselView()
-
-@property (nonatomic, strong) NSMutableArray *carouselItems;
+@property (nonatomic, assign) int itemWidth;
+@property (nonatomic, assign) int itemSpacing;
+@property (nonatomic, assign) int edgeSpacing;
+@property (nonatomic, assign) id <CarouselViewDelegate> delegate;
 
 @end
 
-@implementation CarouselView
+@implementation BCCCarouselView
 
 - (id)initWithFrame:(CGRect)frame
+          itemWidth:(int)itemWidth
+        itemSpacing:(int)itemSpacing
+        edgeSpacing:(int)edgeSpacing
 {
     if(self = [super initWithFrame:frame]) {
-        self.layer.borderColor = [UIColor blackColor].CGColor;
-        self.layer.borderWidth = 1.0f;
+        self.showsHorizontalScrollIndicator = NO;
+        
+        _itemWidth = itemWidth;
+        _itemSpacing = itemSpacing;
+        _edgeSpacing = edgeSpacing;
     }
-    
-    self.showsHorizontalScrollIndicator = NO;
     
     return self;
 }
@@ -35,24 +39,24 @@
 {
     int counter = 0;
     
-    for(CarouselItemModel *model in models) {
+    for(id model in models) {
         float x = counter == 0 ? 0 : ((counter * self.itemWidth) + (self.itemSpacing * counter));
         
-        if(self.horizontalEdgeOffset > 0) {
-            x += self.horizontalEdgeOffset;
+        if(self.edgeSpacing > 0) {
+            x += self.edgeSpacing;
         }
         
         CGRect frame = CGRectMake(x, 0, self.itemWidth, self.bounds.size.height);
-        CarouselItemView *carouselItem = [[CarouselItemView alloc] initWithFrame:frame andModel:model];
-        
+        UIView *carouselItem = [[self delegate] viewForCarouselItem:model frame:frame];
         [self addSubview:carouselItem];
         [self.carouselItems addObject:carouselItem];
+        
         counter++;
     }
     
     float totalWidth = (self.itemWidth * models.count) + (self.itemSpacing * models.count);
     totalWidth -= self.itemSpacing; // make sure the last item is flush with the edge
-    totalWidth += self.horizontalEdgeOffset * 2; // account for the horizontal edge offset
+    totalWidth += self.edgeSpacing * 2; // account for the horizontal edge offset
     self.contentSize = CGSizeMake(totalWidth, self.bounds.size.height);
 }
 

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1626293D18F5C9D0006DDA74 /* CarouselItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1626293C18F5C9D0006DDA74 /* CarouselItemView.m */; };
-		1626294018F5C9F5006DDA74 /* CarouselView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1626293F18F5C9F5006DDA74 /* CarouselView.m */; };
+		1626294018F5C9F5006DDA74 /* BCCCarouselView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1626293F18F5C9F5006DDA74 /* BCCCarouselView.m */; };
 		16276C0618F464BB00EDAB11 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16276C0518F464BB00EDAB11 /* QuartzCore.framework */; };
 		1699C69118F5D37A00C636D1 /* CarouselItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1699C69018F5D37A00C636D1 /* CarouselItemModel.m */; };
 		6D36F6F604E2422BA494868F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B79D2ADCEE243D399EDE833 /* libPods.a */; };
@@ -41,8 +41,8 @@
 /* Begin PBXFileReference section */
 		1626293B18F5C9D0006DDA74 /* CarouselItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarouselItemView.h; sourceTree = "<group>"; };
 		1626293C18F5C9D0006DDA74 /* CarouselItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarouselItemView.m; sourceTree = "<group>"; };
-		1626293E18F5C9F5006DDA74 /* CarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarouselView.h; sourceTree = "<group>"; };
-		1626293F18F5C9F5006DDA74 /* CarouselView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarouselView.m; sourceTree = "<group>"; };
+		1626293E18F5C9F5006DDA74 /* BCCCarouselView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCCCarouselView.h; sourceTree = "<group>"; };
+		1626293F18F5C9F5006DDA74 /* BCCCarouselView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCCCarouselView.m; sourceTree = "<group>"; };
 		16276C0518F464BB00EDAB11 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1699C68F18F5D37A00C636D1 /* CarouselItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarouselItemModel.h; sourceTree = "<group>"; };
 		1699C69018F5D37A00C636D1 /* CarouselItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarouselItemModel.m; sourceTree = "<group>"; };
@@ -95,6 +95,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1699C69418F6C75200C636D1 /* Carousel */ = {
+			isa = PBXGroup;
+			children = (
+				1626293E18F5C9F5006DDA74 /* BCCCarouselView.h */,
+				1626293F18F5C9F5006DDA74 /* BCCCarouselView.m */,
+			);
+			name = Carousel;
+			sourceTree = "<group>";
+		};
 		96E0995118EF8E7E00BE56E7 = {
 			isa = PBXGroup;
 			children = (
@@ -131,19 +140,18 @@
 		96E0996318EF8E7F00BE56E7 /* DataSortSample */ = {
 			isa = PBXGroup;
 			children = (
+				1699C69418F6C75200C636D1 /* Carousel */,
 				96E0996C18EF8E7F00BE56E7 /* AppDelegate.h */,
 				96E0996D18EF8E7F00BE56E7 /* AppDelegate.m */,
-				96E0996F18EF8E7F00BE56E7 /* Main.storyboard */,
 				96E0997218EF8E7F00BE56E7 /* ViewController.h */,
 				96E0997318EF8E7F00BE56E7 /* ViewController.m */,
-				96E0997518EF8E7F00BE56E7 /* Images.xcassets */,
-				96E0996418EF8E7F00BE56E7 /* Supporting Files */,
-				1626293E18F5C9F5006DDA74 /* CarouselView.h */,
-				1626293F18F5C9F5006DDA74 /* CarouselView.m */,
 				1626293B18F5C9D0006DDA74 /* CarouselItemView.h */,
 				1626293C18F5C9D0006DDA74 /* CarouselItemView.m */,
 				1699C68F18F5D37A00C636D1 /* CarouselItemModel.h */,
 				1699C69018F5D37A00C636D1 /* CarouselItemModel.m */,
+				96E0996F18EF8E7F00BE56E7 /* Main.storyboard */,
+				96E0997518EF8E7F00BE56E7 /* Images.xcassets */,
+				96E0996418EF8E7F00BE56E7 /* Supporting Files */,
 			);
 			path = DataSortSample;
 			sourceTree = "<group>";
@@ -310,7 +318,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96E0997418EF8E7F00BE56E7 /* ViewController.m in Sources */,
-				1626294018F5C9F5006DDA74 /* CarouselView.m in Sources */,
+				1626294018F5C9F5006DDA74 /* BCCCarouselView.m in Sources */,
 				1699C69118F5D37A00C636D1 /* CarouselItemModel.m in Sources */,
 				96E0996E18EF8E7F00BE56E7 /* AppDelegate.m in Sources */,
 				1626293D18F5C9D0006DDA74 /* CarouselItemView.m in Sources */,
