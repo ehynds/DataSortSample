@@ -7,7 +7,7 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import "BCCCarouselView.h"
+#import "BCCCarousel.h"
 #import "CarouselItemView.h"
 #import "CarouselItemModel.h"
 #import "ViewController.h"
@@ -82,20 +82,19 @@
 - (UIView *)viewForCarouselItem:(id)model frame:(CGRect)frame
 {
     UIView *itemView = [[CarouselItemView alloc] initWithFrame:frame andModel:model];
-    itemView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     return itemView;
 }
 
 #pragma mark - Utility functions
 
 // Creates a carousel for a given letter if it hasn't already been created yet.
-- (BCCCarouselView *)carouselForLetter:(NSString *)letter
+- (BCCCarousel *)carouselForLetter:(NSString *)letter
 {
     if(!self.carousels) {
         self.carousels = [NSMutableDictionary dictionary];
     }
     
-    BCCCarouselView *carousel;
+    BCCCarousel *carousel;
     
     if((carousel = [self.carousels objectForKey:letter])) {
         return carousel;
@@ -103,12 +102,14 @@
     
     CGRect frame = CGRectMake(0, 0, self.tableView.bounds.size.width, kCellHeight);
     
-    carousel = [[BCCCarouselView alloc] initWithFrame:frame
+    carousel = [[BCCCarousel alloc] initWithFrame:frame
                                          itemWidth:kCellWidth
                                        itemSpacing:kCellHorizontalSpacing
                                        edgeSpacing: kIndexViewWidth];
     
     carousel.delegate = self;
+    carousel.scrollView.layer.borderColor = [UIColor blackColor].CGColor;
+    carousel.scrollView.layer.borderWidth = 2.0f;
     [carousel populateWithModels:[self.recipeDict objectForKey:letter]];
     self.carousels[letter] = carousel;
     
@@ -160,8 +161,10 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reusableCellIdentifier];
+        cell.layer.borderColor = [UIColor purpleColor].CGColor;
+        cell.layer.borderWidth = 3.0f;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell addSubview:[self carouselForLetter:letter]];
+        [cell addSubview:[[self carouselForLetter:letter] view]];
     }
     
     return cell;
@@ -193,12 +196,14 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     CGRect viewFrame = CGRectMake(0, 0, self.tableView.bounds.size.width, kCellHeaderHeight);
     UIView *view = [[UIView alloc] initWithFrame:viewFrame];
+    view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
     NSString *title = [self tableView:tableView titleForHeaderInSection:section];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
     label.backgroundColor = [UIColor grayColor];
     label.text = [title uppercaseString];
     label.frame = CGRectMake(kIndexViewWidth, 0, viewFrame.size.width, viewFrame.size.height);
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [view addSubview:label];
     
     return view;

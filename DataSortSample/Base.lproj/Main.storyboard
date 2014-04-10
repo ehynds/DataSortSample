@@ -28,7 +28,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="eX9-6u-51z" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="EMD-12-FPW"/>
+                            <constraint firstAttribute="width" secondItem="eX9-6u-51z" secondAttribute="width" id="8Xa-HJ-QOh"/>
+                            <constraint firstItem="eX9-6u-51z" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="A7f-OS-5b3"/>
+                            <constraint firstAttribute="height" secondItem="eX9-6u-51z" secondAttribute="height" id="cAQ-rb-itU"/>
                         </constraints>
                     </view>
                     <connections>

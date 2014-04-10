@@ -15,7 +15,10 @@
 
 @end
 
-@interface BCCCarouselView : UIScrollView
+@interface BCCCarousel : UIViewController
+
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, assign) id <CarouselViewDelegate> delegate;
 
 /// An array of the UIViews within the carousel
 @property (nonatomic, strong) NSMutableArray *carouselItems;
