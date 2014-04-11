@@ -23,7 +23,7 @@
 
 @interface ViewController ()
 
-@property(nonatomic, strong) NSMutableDictionary *recipeDict;
+@property(nonatomic, strong) NSMutableDictionary *videoDict;
 @property(nonatomic, strong) NSMutableDictionary *carousels;
 @property(nonatomic, strong) NSArray *letters;
 
@@ -36,63 +36,40 @@
     [super viewDidLoad];
     
     // In practice these will probably already be video objects
-    self.recipes = @[[CarouselItemModel modelWithTitle:@"Egg Benedict"],
-                     [CarouselItemModel modelWithTitle:@"Mushroom Risotto"],
-                     [CarouselItemModel modelWithTitle:@"Full Breakfast"],
-                     [CarouselItemModel modelWithTitle:@"Hamburger"],
-                     [CarouselItemModel modelWithTitle:@"Ham and Egg Sandwich"],
-                     [CarouselItemModel modelWithTitle:@"Anchovy Cup Cakes"],
-                     [CarouselItemModel modelWithTitle:@"A1 Steak Sauce"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Almond Butter"],
-                     [CarouselItemModel modelWithTitle:@"Alaskan King Salmon"],
-                     [CarouselItemModel modelWithTitle:@"Alphabet Soup"],
-                     [CarouselItemModel modelWithTitle:@"Butternut Squash"],
-                     [CarouselItemModel modelWithTitle:@"Creme Brelee"],
-                     [CarouselItemModel modelWithTitle:@"Pound Cake"],
-                     [CarouselItemModel modelWithTitle:@"Pancakes"],
-                     [CarouselItemModel modelWithTitle:@"Black Bean Soup"],
-                     [CarouselItemModel modelWithTitle:@"Ginger Bread"],
-                     [CarouselItemModel modelWithTitle:@"Vegetable Stir Fry"],
-                     [CarouselItemModel modelWithTitle:@"Omlette"],
-                     [CarouselItemModel modelWithTitle:@"Candied Apples"],
-                     [CarouselItemModel modelWithTitle:@"Apple Pie"],
-                     [CarouselItemModel modelWithTitle:@"Applesauce"],
-                     [CarouselItemModel modelWithTitle:@"White Chocolate Donut"],
-                     [CarouselItemModel modelWithTitle:@"Starbucks Coffee"],
-                     [CarouselItemModel modelWithTitle:@"Vegetable Curry"],
-                     [CarouselItemModel modelWithTitle:@"Instant Noodle with Egg"],
-                     [CarouselItemModel modelWithTitle:@"Noodle with BBQ Pork"]];
+    self.videos = @[
+                    @{ @"title": @"Test 1", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 2", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 3", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 4", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 5", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 6", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 7", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 8", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 9", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 10", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"Test 11", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" }
+                     ];
     
-    self.recipeDict = [self groupByAlpha];
-    self.letters = [[self.recipeDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    self.videoDict = [self groupByAlpha];
+    self.letters = [[self.videoDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
 }
 
 #pragma mark - Carousel delegate methods
 
 - (UIView *)viewForCarouselItemIndex:(int)index frame:(CGRect)frame carousel:(id)carousel
 {
-    CarouselItemModel *model = [[self modelsForCarousel:carousel] objectAtIndex:index];
-    return [[CarouselItemView alloc] initWithFrame:frame andModel:model];
+    NSDictionary *video = [[self videosForCarousel:carousel] objectAtIndex:index];
+    return [[CarouselItemView alloc] initWithFrame:frame andVideo:video];
 }
 
 #pragma mark - Utility functions
 
 // Returns the models that should be associated with a given carousel instance
-- (NSArray *)modelsForCarousel:(BCCCarousel *)carousel
+- (NSArray *)videosForCarousel:(BCCCarousel *)carousel
 {
     for(NSString *letter in self.carousels) {
         if([self.carousels objectForKey:letter] == carousel) {
-            return [self.recipeDict objectForKey:letter];
+            return [self.videoDict objectForKey:letter];
         }
     }
     
@@ -115,7 +92,7 @@
     CGRect frame = CGRectMake(0, 0, self.tableView.bounds.size.width, kCellHeight);
     
     carousel = [[BCCCarousel alloc] initWithFrame:frame
-                                         numItems:[[self.recipeDict objectForKey:letter] count]
+                                         numItems:[[self.videoDict objectForKey:letter] count]
                                         itemWidth:kCellWidth
                                       itemSpacing:kCellHorizontalSpacing
                                       edgeSpacing:kIndexViewWidth];
@@ -132,14 +109,14 @@
 {
     NSMutableDictionary *ret = [NSMutableDictionary dictionary];
     
-    for(CarouselItemModel *recipe in self.recipes) {
-        NSString *dictKey = [[NSString stringWithFormat:@"%c", [recipe.title characterAtIndex:0]] lowercaseString];
+    for(NSDictionary *video in self.videos) {
+        NSString *dictKey = [[NSString stringWithFormat:@"%c", [[video objectForKey:@"title"] characterAtIndex:0]] lowercaseString];
         
         if([ret objectForKey:dictKey] == nil) {
             [ret setObject:[NSMutableArray array] forKey:dictKey];
         }
         
-        [[ret objectForKey:dictKey] addObject:recipe];
+        [[ret objectForKey:dictKey] addObject:video];
     }
     
     return ret;

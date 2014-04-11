@@ -7,7 +7,6 @@
 //
 
 #import "CarouselItemView.h"
-#import "CarouselItemModel.h"
 
 @interface CarouselItemView()
 
@@ -17,12 +16,12 @@
 
 @implementation CarouselItemView
 
-- (id)initWithFrame:(CGRect)frame andModel:(CarouselItemModel *)model
+- (id)initWithFrame:(CGRect)frame andVideo:(NSDictionary *)video
 {
     if(self = [super initWithFrame:frame]) {
         self.translatesAutoresizingMaskIntoConstraints = NO;
         self.backgroundColor = [UIColor redColor];
-        self.model = model;
+        self.video = video;
         [self render];
     }
     
@@ -32,7 +31,7 @@
 - (void)render
 {
     self.titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
-    self.titleLabel.text = self.model.title;
+    self.titleLabel.text = [self.video objectForKey:@"title"];
     [self addSubview:self.titleLabel];
 }
 

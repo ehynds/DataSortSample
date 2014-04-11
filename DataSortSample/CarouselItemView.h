@@ -12,7 +12,7 @@
 
 @interface CarouselItemView : UIView
 
-- (id)initWithFrame:(CGRect)frame andModel:(CarouselItemModel *)model;
-@property (nonatomic, strong) CarouselItemModel *model;
+- (id)initWithFrame:(CGRect)frame andVideo:(NSDictionary *)video;
+@property (nonatomic, copy) NSDictionary *video;
 
 @end

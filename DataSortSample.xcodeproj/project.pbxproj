@@ -10,7 +10,6 @@
 		1626293D18F5C9D0006DDA74 /* CarouselItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1626293C18F5C9D0006DDA74 /* CarouselItemView.m */; };
 		1626294018F5C9F5006DDA74 /* BCCCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1626293F18F5C9F5006DDA74 /* BCCCarousel.m */; };
 		16276C0618F464BB00EDAB11 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16276C0518F464BB00EDAB11 /* QuartzCore.framework */; };
-		1699C69118F5D37A00C636D1 /* CarouselItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1699C69018F5D37A00C636D1 /* CarouselItemModel.m */; };
 		6D36F6F604E2422BA494868F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B79D2ADCEE243D399EDE833 /* libPods.a */; };
 		96E0995E18EF8E7F00BE56E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96E0995D18EF8E7F00BE56E7 /* Foundation.framework */; };
 		96E0996018EF8E7F00BE56E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96E0995F18EF8E7F00BE56E7 /* CoreGraphics.framework */; };
@@ -44,8 +43,6 @@
 		1626293E18F5C9F5006DDA74 /* BCCCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCCCarousel.h; sourceTree = "<group>"; };
 		1626293F18F5C9F5006DDA74 /* BCCCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCCCarousel.m; sourceTree = "<group>"; };
 		16276C0518F464BB00EDAB11 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		1699C68F18F5D37A00C636D1 /* CarouselItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarouselItemModel.h; sourceTree = "<group>"; };
-		1699C69018F5D37A00C636D1 /* CarouselItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarouselItemModel.m; sourceTree = "<group>"; };
 		5B6CCE645F4843258210F5A8 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		96E0995A18EF8E7F00BE56E7 /* DataSortSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DataSortSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96E0995D18EF8E7F00BE56E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -147,8 +144,6 @@
 				96E0997318EF8E7F00BE56E7 /* ViewController.m */,
 				1626293B18F5C9D0006DDA74 /* CarouselItemView.h */,
 				1626293C18F5C9D0006DDA74 /* CarouselItemView.m */,
-				1699C68F18F5D37A00C636D1 /* CarouselItemModel.h */,
-				1699C69018F5D37A00C636D1 /* CarouselItemModel.m */,
 				96E0996F18EF8E7F00BE56E7 /* Main.storyboard */,
 				96E0997518EF8E7F00BE56E7 /* Images.xcassets */,
 				96E0996418EF8E7F00BE56E7 /* Supporting Files */,
@@ -319,7 +314,6 @@
 			files = (
 				96E0997418EF8E7F00BE56E7 /* ViewController.m in Sources */,
 				1626294018F5C9F5006DDA74 /* BCCCarousel.m in Sources */,
-				1699C69118F5D37A00C636D1 /* CarouselItemModel.m in Sources */,
 				96E0996E18EF8E7F00BE56E7 /* AppDelegate.m in Sources */,
 				1626293D18F5C9D0006DDA74 /* CarouselItemView.m in Sources */,
 				96E0996A18EF8E7F00BE56E7 /* main.m in Sources */,

@@ -12,6 +12,6 @@
 
 @property (strong) IBOutlet UITableView *tableView;
 @property (strong) UICollectionView *collectionView;
-@property (strong) NSArray *recipes;
+@property (strong) NSArray *videos;
 
 @end
