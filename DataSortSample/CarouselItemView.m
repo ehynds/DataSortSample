@@ -23,6 +23,7 @@
     if(self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor redColor];
         self.model = model;
+        self.translatesAutoresizingMaskIntoConstraints = NO;
         self.layer.borderWidth = 1.0f;
         self.layer.borderColor = [UIColor greenColor].CGColor;
         [self render];

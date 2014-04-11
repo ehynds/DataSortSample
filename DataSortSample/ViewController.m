@@ -106,14 +106,12 @@
     CGRect frame = CGRectMake(0, 0, self.tableView.bounds.size.width, kCellHeight);
     
     carousel = [[BCCCarousel alloc] initWithFrame:frame
-                                         itemWidth:kCellWidth
-                                       itemSpacing:kCellHorizontalSpacing
-                                       edgeSpacing: kIndexViewWidth];
+                                        andModels:[self.recipeDict objectForKey:letter]
+                                        itemWidth:kCellWidth
+                                      itemSpacing:kCellHorizontalSpacing
+                                      edgeSpacing:kIndexViewWidth];
     
     carousel.delegate = self;
-    carousel.scrollView.layer.borderColor = [UIColor blackColor].CGColor;
-    carousel.scrollView.layer.borderWidth = 2.0f;
-    [carousel populateWithModels:[self.recipeDict objectForKey:letter]];
     self.carousels[letter] = carousel;
     
     return carousel;
@@ -169,7 +167,7 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         BCCCarousel *carousel = [self carouselForLetter:letter];
-        [cell addSubview:carousel];
+        [cell addSubview:carousel.view];
     }
     
     return cell;
@@ -228,7 +226,7 @@
         int width = UIDeviceOrientationIsPortrait(orientation) ? 768 : 1024;
         CGRect frame = CGRectMake(0, 0, width, kCellHeight);
         BCCCarousel *carousel = [self.carousels objectForKey:letter];
-        carousel.frame = frame;
+        // carousel.frame = frame;
     }
 }
 

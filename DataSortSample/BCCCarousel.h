@@ -15,7 +15,7 @@
 
 @end
 
-@interface BCCCarousel : UIScrollView
+@interface BCCCarousel : UIViewController
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) id <CarouselViewDelegate> delegate;
@@ -25,11 +25,9 @@
 
 /// Designated initializer
 - (id)initWithFrame:(CGRect)frame
+          andModels:(NSArray *)models
           itemWidth:(int)itemWidth
         itemSpacing:(int)itemSpacing
         edgeSpacing:(int)edgeSpacing;
-
-/// Populate the carousel with an array of models. The carousel will call the delegate method `viewForCarouselItem:model:index` which should return a UIView for the item
-- (void)populateWithModels:(NSArray *)models;
 
 @end
