@@ -171,8 +171,8 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reusableCellIdentifier];
-        cell.layer.borderColor = [UIColor purpleColor].CGColor;
-        cell.layer.borderWidth = 3.0f;
+        //cell.layer.borderColor = [UIColor purpleColor].CGColor;
+        //cell.layer.borderWidth = 3.0f;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         BCCCarousel *carousel = [self carouselForLetter:letter];

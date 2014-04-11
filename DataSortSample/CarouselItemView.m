@@ -20,11 +20,9 @@
 - (id)initWithFrame:(CGRect)frame andModel:(CarouselItemModel *)model
 {
     if(self = [super initWithFrame:frame]) {
+        self.translatesAutoresizingMaskIntoConstraints = NO;
         self.backgroundColor = [UIColor redColor];
         self.model = model;
-        self.translatesAutoresizingMaskIntoConstraints = NO;
-        self.layer.borderWidth = 1.0f;
-        self.layer.borderColor = [UIColor greenColor].CGColor;
         [self render];
     }
     
@@ -33,7 +31,6 @@
 
 - (void)render
 {
-    NSLog(@"rendering item for model %@", self.model.title);
     self.titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
     self.titleLabel.text = self.model.title;
     [self addSubview:self.titleLabel];

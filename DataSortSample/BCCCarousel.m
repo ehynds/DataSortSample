@@ -36,8 +36,8 @@
         _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
         _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _scrollView.showsHorizontalScrollIndicator = NO;
-        _scrollView.layer.borderColor = [UIColor blackColor].CGColor;
-        _scrollView.layer.borderWidth = 2.0f;
+        // _scrollView.layer.borderColor = [UIColor blackColor].CGColor;
+        // _scrollView.layer.borderWidth = 2.0f;
         _scrollView.delegate = self;
         
         self.view.translatesAutoresizingMaskIntoConstraints = NO;
