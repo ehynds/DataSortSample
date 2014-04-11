@@ -35,10 +35,6 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didRotate:)name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
-    
     // In practice these will probably already be video objects
     self.recipes = @[[CarouselItemModel modelWithTitle:@"Egg Benedict"],
                      [CarouselItemModel modelWithTitle:@"Mushroom Risotto"],
@@ -215,20 +211,5 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return kCellHeaderHeight;
 }
-
-- (void)didRotate:(NSNotification *)notification
-{
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    
-    // TODO remove this when we figure out why setting an autoresizeMask on the
-    // carousel causes the contentWidth to be off
-    for(NSString *letter in self.carousels) {
-        int width = UIDeviceOrientationIsPortrait(orientation) ? 768 : 1024;
-        CGRect frame = CGRectMake(0, 0, width, kCellHeight);
-        BCCCarousel *carousel = [self.carousels objectForKey:letter];
-        // carousel.frame = frame;
-    }
-}
-
 
 @end

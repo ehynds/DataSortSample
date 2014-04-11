@@ -10,6 +10,7 @@
 
 @interface BCCCarousel()
 
+@property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSArray *models;
 @property (nonatomic, assign) int itemWidth;
 @property (nonatomic, assign) int itemSpacing;
@@ -31,22 +32,28 @@
         _itemSpacing = itemSpacing;
         _edgeSpacing = edgeSpacing;
         
-        self.scrollView = [[UIScrollView alloc] initWithFrame:frame];
-        self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.scrollView.showsHorizontalScrollIndicator = NO;
-        self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-        self.scrollView.layer.borderColor = [UIColor blackColor].CGColor;
-        self.scrollView.layer.borderWidth = 2.0f;
-        [self.view addSubview:self.scrollView];
+        _scrollView = [[UIScrollView alloc] initWithFrame:frame];
+        _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+        _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.layer.borderColor = [UIColor blackColor].CGColor;
+        _scrollView.layer.borderWidth = 2.0f;
+        
+        self.view.translatesAutoresizingMaskIntoConstraints = NO;
+        self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     }
     
     return self;
 }
 
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    // If the UIScrollView is added to the view hierarchy before this time then
+    // its contentSize is calculated correctly when using an autoResizingMask.
+    [self.view addSubview:self.scrollView];
+    
     [self populate];
 }
 
@@ -64,7 +71,6 @@
         
         CGRect itemRect = CGRectMake(x, 0, self.itemWidth, height);
         UIView *carouselItem = [[self delegate] viewForCarouselItem:model frame:itemRect];
-        NSLog(@"adding carousel item %@", NSStringFromCGRect(itemRect));
         [self.scrollView addSubview:carouselItem];
         [self.carouselItems addObject:carouselItem];
         
