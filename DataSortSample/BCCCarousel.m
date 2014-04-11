@@ -55,29 +55,19 @@
     // its contentSize is calculated incorrectly when using an autoResizingMask.
     [self.view addSubview:self.scrollView];
     
-    // Fill the carousel with items
-    [self populate];
+    // Set the correct content width for the number of items we have
+    [self setDimensions];
+    
+    // Load in the items that are visible
+    [self loadVisibleItems];
 }
 
-- (void)populate
+- (void)setDimensions
 {
     int height = self.scrollView.bounds.size.height;
-    
-    for(int i = 0; i < self.numItems; i++) {
-        float x = i == 0 ? 0 : ((i * self.itemWidth) + (self.itemSpacing * i));
-        
-        if(self.edgeSpacing > 0) {
-            x += self.edgeSpacing;
-        }
-        
-        CGRect itemRect = CGRectMake(x, 0, self.itemWidth, height);
-        UIView *carouselItem = [[self delegate] viewForCarouselItemIndex:i frame:itemRect carousel:self];
-        [self.scrollView addSubview:carouselItem];
-    }
-    
     float totalWidth = (self.itemWidth * self.numItems) + (self.itemSpacing * self.numItems);
     totalWidth -= self.itemSpacing; // make sure the last item is flush with the edge
-    totalWidth += self.edgeSpacing * 2; // account for the horizontal edge offset
+    totalWidth += self.edgeSpacing * 2; // account for the horizontal edge offset on either side
     self.scrollView.contentSize = CGSizeMake(totalWidth, height);
 }
 
@@ -85,7 +75,42 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    // TODO - lazy load images in [self visibleItems]
+    [self loadVisibleItems];
+}
+
+- (void)loadVisibleItems
+{
+    // int currentPage = (self.scrollView.contentOffset.x / self.scrollView.frame.size.width);
+    float totalPages = (self.scrollView.contentSize.width / self.scrollView.frame.size.width) - 1;
+    float itemsPerPage = self.numItems / (totalPages + 1);
+    int firstVisibleItemIndex = self.scrollView.contentOffset.x / (self.scrollView.frame.size.width / itemsPerPage);
+    
+    // The index of the last item that needs to be loaded
+    int endIndex = firstVisibleItemIndex + itemsPerPage + 2;
+    endIndex += 2; // +2 so the user doesn't see them items load when they come into view
+    endIndex = endIndex > self.numItems ? endIndex = self.numItems : endIndex; // keep in bounds
+    
+    for(int i = 0; i < self.numItems; i++) {
+        UIView *itemView = [self.scrollView viewWithTag:i + 1];
+        BOOL isVisibleItem = (i >= firstVisibleItemIndex && i <= endIndex);
+        
+        // If the current index falls within the range of items that are visible
+        // and the view does not exist, load it.
+        if(itemView == nil && isVisibleItem) {
+            int x = (i * self.itemWidth) + (i * self.itemSpacing);
+            x += self.edgeSpacing ? self.edgeSpacing : 0;
+            
+            CGRect itemRect = CGRectMake(x, 0, self.itemWidth, self.scrollView.frame.size.height);
+            UIView *carouselItem = [[self delegate] viewForCarouselItemIndex:i frame:itemRect carousel:self];
+            carouselItem.tag = i + 1;
+            [self.scrollView addSubview:carouselItem];
+            
+        // Otherwise if the view is out of sight unload it to reclaim memory
+        } else if(itemView && !isVisibleItem) {
+            [itemView removeFromSuperview];
+        }
+    }
+    
 }
 
 #pragma mark - Utils
