@@ -17,12 +17,9 @@
 
 @end
 
-@interface BCCCarousel : UIViewController
+@interface BCCCarousel : UIViewController <UIScrollViewDelegate>
 
 @property (nonatomic, assign) id <CarouselViewDelegate> delegate;
-
-/// An array of the UIViews within the carousel
-@property (nonatomic, strong) NSMutableArray *carouselItems;
 
 /// Designated initializer
 - (id)initWithFrame:(CGRect)frame
@@ -30,5 +27,11 @@
           itemWidth:(int)itemWidth
         itemSpacing:(int)itemSpacing
         edgeSpacing:(int)edgeSpacing;
+
+/// Determine whether an item in the carousel is currently within view
+- (BOOL)itemIsVisible:(UIView *)itemView;
+
+/// Retrieve an array of items currently within view
+- (NSArray *)visibleItems;
 
 @end

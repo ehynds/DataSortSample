@@ -11,7 +11,6 @@
 
 @interface CarouselItemView()
 
-@property (nonatomic, strong) CarouselItemModel *model;
 @property (nonatomic, strong) UILabel *titleLabel;
 
 @end

@@ -13,5 +13,6 @@
 @interface CarouselItemView : UIView
 
 - (id)initWithFrame:(CGRect)frame andModel:(CarouselItemModel *)model;
+@property (nonatomic, strong) CarouselItemModel *model;
 
 @end

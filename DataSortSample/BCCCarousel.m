@@ -38,6 +38,7 @@
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.layer.borderColor = [UIColor blackColor].CGColor;
         _scrollView.layer.borderWidth = 2.0f;
+        _scrollView.delegate = self;
         
         self.view.translatesAutoresizingMaskIntoConstraints = NO;
         self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -72,13 +73,39 @@
         CGRect itemRect = CGRectMake(x, 0, self.itemWidth, height);
         UIView *carouselItem = [[self delegate] viewForCarouselItemIndex:i frame:itemRect carousel:self];
         [self.scrollView addSubview:carouselItem];
-        [self.carouselItems addObject:carouselItem];
     }
     
     float totalWidth = (self.itemWidth * self.numItems) + (self.itemSpacing * self.numItems);
     totalWidth -= self.itemSpacing; // make sure the last item is flush with the edge
     totalWidth += self.edgeSpacing * 2; // account for the horizontal edge offset
     self.scrollView.contentSize = CGSizeMake(totalWidth, height);
+}
+
+#pragma mark - UIScrollView delegates
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // TODO - lazy load images in [self visibleItems]
+}
+
+#pragma mark - Utils
+
+- (BOOL)itemIsVisible:(UIView *)itemView
+{
+    return CGRectIntersectsRect(self.scrollView.bounds, itemView.frame);
+}
+
+- (NSArray *)visibleItems
+{
+    NSMutableArray *visibleItems = [NSMutableArray array];
+    
+    for(UIView *view in self.scrollView.subviews) {
+        if([self itemIsVisible:view]) {
+            [visibleItems addObject:view];
+        }
+    }
+    
+    return visibleItems;
 }
 
 @end
