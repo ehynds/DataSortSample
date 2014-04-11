@@ -9,17 +9,14 @@
 #import <QuartzCore/QuartzCore.h>
 #import "BCCCarousel.h"
 #import "CarouselItemView.h"
-#import "CarouselItemModel.h"
 #import "ViewController.h"
 
 
 #define kIndexViewWidth 30
-#define kCellWidth 165
-#define kCellHeight 175
-#define kCellHorizontalSpacing 15
-#define kCellMarginTop 20
-#define kCellMarginBottom 50
-#define kCellHeaderHeight 25
+#define kCellWidth 156
+#define kCellHeight 222
+#define kCellHorizontalSpacing 22
+#define kCellHeaderHeight 35
 
 @interface ViewController ()
 
@@ -35,19 +32,28 @@
 {
     [super viewDidLoad];
     
-    // In practice these will probably already be video objects
     self.videos = @[
-                    @{ @"title": @"Test 1", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 2", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 3", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 4", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 5", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 6", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 7", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 8", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 9", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 10", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" },
-                    @{ @"title": @"Test 11", @"publishedDate": @"01/01/2014", @"thumbnailURL": @"" }
+                    @{ @"title": @"A Test 1", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"A Test 2", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"A Test 3 with a longer title that is really long", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"A Test 4", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"A Test 5", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"A Test 6", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"A Test 7", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"A Test 8", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"B Test 1", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"B Test 2", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"B Test 3", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"B Test 4", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"B Test 5", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"B Test 6", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"C Test 1", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"C Test 2", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"C Test 3", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"D Test 1", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"E Test 1", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"F Test 1", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" },
+                    @{ @"title": @"G Test 1", @"publishedDate": @"Jan. 1, 2014", @"thumbnailURL": @"" }
                      ];
     
     self.videoDict = [self groupByAlpha];
@@ -160,7 +166,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return kCellMarginTop + kCellMarginBottom + kCellHeight;
+    return kCellHeight;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -189,8 +195,10 @@
     
     NSString *title = [self tableView:tableView titleForHeaderInSection:section];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    label.backgroundColor = [UIColor grayColor];
     label.text = [title uppercaseString];
+    label.font = [UIFont fontWithName:@"Georgia" size:20.0f];
+    label.textColor = [UIColor colorWithRed:(110.0f / 255.0f) green:(110.0f / 255.0f) blue:(113.0f / 255.0f) alpha:1.0f];
+    
     label.frame = CGRectMake(kIndexViewWidth, 0, viewFrame.size.width, viewFrame.size.height);
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [view addSubview:label];
