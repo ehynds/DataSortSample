@@ -79,12 +79,25 @@
 
 #pragma mark - Carousel delegate methods
 
-- (UIView *)viewForCarouselItem:(id)model frame:(CGRect)frame
+- (UIView *)viewForCarouselItemIndex:(int)index frame:(CGRect)frame carousel:(id)carousel
 {
+    CarouselItemModel *model = [[self modelsForCarousel:carousel] objectAtIndex:index];
     return [[CarouselItemView alloc] initWithFrame:frame andModel:model];
 }
 
 #pragma mark - Utility functions
+
+// Returns the models that should be associated with a given carousel instance
+- (NSArray *)modelsForCarousel:(BCCCarousel *)carousel
+{
+    for(NSString *letter in self.carousels) {
+        if([self.carousels objectForKey:letter] == carousel) {
+            return [self.recipeDict objectForKey:letter];
+        }
+    }
+    
+    return @[];
+}
 
 // Creates a carousel for a given letter if it hasn't already been created yet.
 - (BCCCarousel *)carouselForLetter:(NSString *)letter
@@ -102,7 +115,7 @@
     CGRect frame = CGRectMake(0, 0, self.tableView.bounds.size.width, kCellHeight);
     
     carousel = [[BCCCarousel alloc] initWithFrame:frame
-                                        andModels:[self.recipeDict objectForKey:letter]
+                                         numItems:[[self.recipeDict objectForKey:letter] count]
                                         itemWidth:kCellWidth
                                       itemSpacing:kCellHorizontalSpacing
                                       edgeSpacing:kIndexViewWidth];

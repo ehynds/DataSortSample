@@ -11,7 +11,7 @@
 @interface BCCCarousel()
 
 @property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) NSArray *models;
+@property (nonatomic, assign) int numItems;
 @property (nonatomic, assign) int itemWidth;
 @property (nonatomic, assign) int itemSpacing;
 @property (nonatomic, assign) int edgeSpacing;
@@ -21,13 +21,13 @@
 @implementation BCCCarousel
 
 - (id)initWithFrame:(CGRect)frame
-          andModels:(NSArray *)models
+           numItems:(int)numItems
           itemWidth:(int)itemWidth
         itemSpacing:(int)itemSpacing
         edgeSpacing:(int)edgeSpacing
 {
     if(self = [super init]) {
-        _models = models;
+        _numItems =  numItems;
         _itemWidth = itemWidth;
         _itemSpacing = itemSpacing;
         _edgeSpacing = edgeSpacing;
@@ -51,33 +51,31 @@
     [super viewDidAppear:animated];
     
     // If the UIScrollView is added to the view hierarchy before this time then
-    // its contentSize is calculated correctly when using an autoResizingMask.
+    // its contentSize is calculated incorrectly when using an autoResizingMask.
     [self.view addSubview:self.scrollView];
     
+    // Fill the carousel with items
     [self populate];
 }
 
 - (void)populate
 {
-    int counter = 0;
     int height = self.scrollView.bounds.size.height;
     
-    for(id model in self.models) {
-        float x = counter == 0 ? 0 : ((counter * self.itemWidth) + (self.itemSpacing * counter));
+    for(int i = 0; i < self.numItems; i++) {
+        float x = i == 0 ? 0 : ((i * self.itemWidth) + (self.itemSpacing * i));
         
         if(self.edgeSpacing > 0) {
             x += self.edgeSpacing;
         }
         
         CGRect itemRect = CGRectMake(x, 0, self.itemWidth, height);
-        UIView *carouselItem = [[self delegate] viewForCarouselItem:model frame:itemRect];
+        UIView *carouselItem = [[self delegate] viewForCarouselItemIndex:i frame:itemRect carousel:self];
         [self.scrollView addSubview:carouselItem];
         [self.carouselItems addObject:carouselItem];
-        
-        counter++;
     }
     
-    float totalWidth = (self.itemWidth * self.models.count) + (self.itemSpacing * self.models.count);
+    float totalWidth = (self.itemWidth * self.numItems) + (self.itemSpacing * self.numItems);
     totalWidth -= self.itemSpacing; // make sure the last item is flush with the edge
     totalWidth += self.edgeSpacing * 2; // account for the horizontal edge offset
     self.scrollView.contentSize = CGSizeMake(totalWidth, height);

@@ -11,7 +11,9 @@
 @protocol CarouselViewDelegate <NSObject>
 
 @required
-- (UIView *)viewForCarouselItem:(id)model frame:(CGRect)frame;
+- (UIView *)viewForCarouselItemIndex:(int)index
+                               frame:(CGRect)frame
+                            carousel:(id)carousel;
 
 @end
 
@@ -24,7 +26,7 @@
 
 /// Designated initializer
 - (id)initWithFrame:(CGRect)frame
-          andModels:(NSArray *)models
+           numItems:(int)numItems
           itemWidth:(int)itemWidth
         itemSpacing:(int)itemSpacing
         edgeSpacing:(int)edgeSpacing;
